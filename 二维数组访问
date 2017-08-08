@@ -1,0 +1,21 @@
+#适用于二维数组知道外层循环的维数，而不知道内层循环的键值的情况下，使用for和foreach罗列出来
+<meta charset="utf-8">
+<?php 
+$cars = array(
+	array("Volvo", 22, 18),
+	array("BMW", 15, 13),
+	array("SaaB", 5, 2),
+	array("Land Rover", 17, 15)
+	);
+echo $cars[0][0]."：库存：".$cars[0][1]."，销量：".$cars[0][2]."<br>";
+echo $cars[1][0]."：库存：".$cars[1][1].", 销量：".$cars[1][2]."<br>";
+for ($i=0; $i <3 ; $i++) { 
+	echo "<p><b>Row number $i</b></p>";
+	echo "<ul>";
+	foreach ($cars[$i] as $key => $value) {
+		echo "<li>$key ----> $value</li>";
+	}
+	echo "</ul>";
+}
+
+?>
