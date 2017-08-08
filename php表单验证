@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>表单验证，从GET、POST或者REQUEST获取的数据经过表单验证，更加安全，这个是自己写的一个表单验证的视例</title>
+</head>
+<body>
+<?php 
+	$userName = $userMail = $website = $gender =$comment = "";
+	$userName = text_input($_POST['userName']);
+	$userMail = text_input($_POST['userMail']);
+	$website = text_input($_POST['website']);
+	$gender = text_input($_POST['gender']);
+	$comment = text_input($_POST['comment']);
+
+	function text_input($data){
+		$data = trim($data);
+		$data = stripcslashes($data);
+		$data = htmlspecialchars($data);
+		return $data;
+	}
+	echo "success";
+?>
+</body>
+</html>
