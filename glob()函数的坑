@@ -1,0 +1,2 @@
+$images = glob("../" . $path . "*.{JPG,PNG,jpg,png,ogg,swf,mp4}", GLOB_BRACE);函数中"*.{JPG,PNG,jpg,png,ogg,swf,mp4}"后缀名中不能添加空格
+否则程序会去查找*. png, *. jpg，格式，这样是查找不到，以至于$images获得的值有空数组。
