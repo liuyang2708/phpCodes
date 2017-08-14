@@ -1,0 +1,103 @@
+Ajax异步获取数据，大概需要这么四个页面：展示数据的html页面，发送请求的js页面，实际的逻辑处理函数php页面，后台存放数据的页面（可以是txt,数组，
+数据库获取等等...)
+
+    1）展示数据的页面，一般用html页面或者php页面，但是标准用html较为合适。在该页面中注意两个地方，一个是需要在触发js函数的地方传入给服务器的值，
+通常用this.value,例如：
+<form> 
+Select a CD:
+<select name="cds" onchange="showCD(this.value)">
+<option value="Bob Dylan">Bob Dylan</option>
+<option value="Bee Gees">Bee Gees</option>
+<option value="Cat Stevens">Cat Stevens</option>
+</select>
+</form>
+
+
+    2）js函数，该函数具有大体的通用行，是一个Ajax请求的函数，如下：
+var xmlHttp
+
+function showCD(str)
+{ 
+xmlHttp=GetXmlHttpObject()
+if (xmlHttp==null)
+ {
+ alert ("Browser does not support HTTP Request")
+ return
+ } 
+var url="getcd.php"
+url=url+"?q="+str
+url=url+"&sid="+Math.random()
+xmlHttp.onreadystatechange=stateChanged 
+xmlHttp.open("GET",url,true)    //实际的Ajax请求行
+xmlHttp.send(null)
+}
+
+function stateChanged() 
+{ 
+ if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
+ { 
+ document.getElementById("txtHint").innerHTML=xmlHttp.responseText //主要是这句根据实际的情况换位实际的内容。
+ } 
+}
+
+function GetXmlHttpObject()
+{
+var xmlHttp=null;
+
+try
+ {
+ // Firefox, Opera 8.0+, Safari
+ xmlHttp=new XMLHttpRequest();
+ }
+catch (e)
+ {
+ // Internet Explorer
+ try
+  {
+  xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+  }
+ catch (e)
+  {
+  xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+ }
+return xmlHttp;
+}
+
+3）具体的PHP处理逻辑页面，此页面根据实际情况，所写的逻辑应该不同，但通常是获取用js传过来的值，处理逻辑，返回给js页面的值,如下：
+<?php
+$q=$_GET["q"];
+
+$xmlDoc = new DOMDocument();
+$xmlDoc->load("cd_catalog.xml");
+
+$x=$xmlDoc->getElementsByTagName('ARTIST');
+
+for ($i=0; $i<=$x->length-1; $i++)
+{
+//Process only element nodes
+if ($x->item($i)->nodeType==1)
+  {
+  if ($x->item($i)->childNodes->item(0)->nodeValue == $q)
+    { 
+    $y=($x->item($i)->parentNode);
+    }
+  }
+}
+
+$cd=($y->childNodes);
+
+for ($i=0;$i<$cd->length;$i++)
+{ 
+//Process only element nodes
+if ($cd->item($i)->nodeType==1)
+  { 
+  echo($cd->item($i)->nodeName);
+  echo(": ");
+  echo($cd->item($i)->childNodes->item(0)->nodeValue);
+  echo("<br />");
+  } 
+}
+?>
+
+4)放置数据的页面，可以是.txt文本文件，xml格式文件，json数组，PHP Arrary数组， 从数据库查询所得结果的PHP页面，按实际需求和项目要求选用。
