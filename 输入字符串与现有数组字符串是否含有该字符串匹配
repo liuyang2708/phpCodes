@@ -1,0 +1,19 @@
+//$q是输入的字符串，$a是一个含有需要查询的是否含有该字符串需要匹配查找的字符串数组。
+if (strlen($q) > 0)
+{
+$hint="";
+for($i=0; $i<count($a); $i++)
+  {
+  if (strtolower($q)==strtolower(substr($a[$i],0,strlen($q))))    //最关键的一句，忽略大小写的两个字符串是否相等的判断
+    {
+    if ($hint=="")
+      {
+      $hint=$a[$i];
+      }
+    else
+      {
+      $hint=$hint." , ".$a[$i];
+      }
+    }
+  }
+}
